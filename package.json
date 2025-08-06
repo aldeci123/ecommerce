@@ -1,0 +1,32 @@
+{
+  "name": "e-commerce",
+  "version": "1.0.0",
+  "description": "criando uma e-commerce com o firebase",
+  "exports": "./lib/index.js",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx tsc-watch --onSuccess \"node --env-file=.env ./lib/index.js\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "celebrate": "^15.0.3",
+    "dayjs": "^1.11.13",
+    "express": "^5.1.0",
+    "express-async-handler": "^1.2.0",
+    "file-type": "^21.0.0",
+    "firebase": "^11.8.1",
+    "firebase-admin": "^13.4.0"
+  },
+  "devDependencies": {
+    "@tsconfig/node22": "^22.0.2",
+    "@types/express": "^5.0.2",
+    "@types/node": "^22.15.21",
+    "tsc-watch": "^6.3.1",
+    "typescript": "^5.8.3"
+  }
+}
