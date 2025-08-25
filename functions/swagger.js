@@ -8,7 +8,7 @@ const doc = {
   },
   servers: [
     {
-      url: 'http://127.0.0.1:5001/e-commerce-adefa/us-central1/api',              // by default: 'http://localhost:3000'
+      url: '[url de sua api]',              // by default: 'http://localhost:3000'
       description: 'Dev'       // by default: ''
     },
     // { ... }
