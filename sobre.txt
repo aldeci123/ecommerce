@@ -1,1 +1,7 @@
 api de e-commerce utilizando nodeJs + TypeScript + Express + Firebase + swagger
+
+Para começar a usar a API, lembre-se de:
+-iniciar com o comando "npm init"
+-logar com sua conta no firebase com o comando "firebase login"
+-para codificar o nodejs com type script usa-se o comando "npm run build:watch"
+- para "subir" a aplicação usa-se "npm run start"
