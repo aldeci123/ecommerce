@@ -5,3 +5,5 @@ Para começar a usar a API, lembre-se de:
 -logar com sua conta no firebase com o comando "firebase login"
 -para codificar o nodejs com type script usa-se o comando "npm run build:watch"
 - para "subir" a aplicação usa-se "npm run start"
+
+após iniciar o comando run start com sucesso, confira sua rota no terminal e vá ate ele, inserindo "/docs" no final para conferir a api. Enjoi!
