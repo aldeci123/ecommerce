@@ -1,0 +1,1538 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "e-commerce",
+    "description": "Api para gestão de dados do E-commerce",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:5001/e-commerce-adefa/us-central1/api",
+      "description": "Dev"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Autenticação de usuários"
+    },
+    {
+      "name": "Users",
+      "description": "Gestão de usuários"
+    },
+    {
+      "name": "Company",
+      "description": "Gestão de empresas"
+    },
+    {
+      "name": "Products",
+      "description": "Gestão de produtos"
+    },
+    {
+      "name": "Categories",
+      "description": "Gestão de categorias"
+    },
+    {
+      "name": "Payment-Methods",
+      "description": "Gestão de métodos de pagamento"
+    },
+    {
+      "name": "Orders",
+      "description": "Gestão da área de pedidos"
+    }
+  ],
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Autenticação de usuário",
+        "description": "Rota utilizada para autenticação de administradores usando email e senha ",
+        "responses": {
+          "200": {
+            "description": "Token do usuário identificado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/loginUser"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/recovery": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Recuperação de senha",
+        "description": "Rota usada para recuperação de acesso (senha) pelos usuários cadastrados através de seu e-mail cadastrado. Receba um e-mail para recuperação de sua senha",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/recoveryUser"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/signin": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Autenticação anônima de usuários clientes",
+        "description": "Rota específica para autenticação de usuários clientes para realização de pedidos sem a necessidade de um cadastro. ",
+        "responses": {
+          "200": {
+            "description": "Token do usuário anônimo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Listar todos os usuários",
+        "description": "Rota usada para listar todos os usuários cadastrados na api",
+        "responses": {
+          "200": {
+            "description": "Lista de todos os usuários",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Cadastro de usuário",
+        "description": "Rota usada para cadastro de novos usuários, requisitando nome, email e senha.",
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/successResponse"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Listar usuário pelo ID",
+        "description": "Rota usada para busca e exibição de um único usuário cadastrado, repassando o parâmetro ID do mesmo",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID do usuário"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados do usuário",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#components/schemas/User"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Atualizar usuário",
+        "description": "Rota disponibilizada para atualizar o campo nome e/ou email de um usuário, especificado pelo ID repassado",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID do usuário"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateUser"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Exclusão de usuário",
+        "description": "Rota específica para exclusão do cadastro de um usuário identificado pelo ID repassado",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID do usuário"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/companies": {
+      "get": {
+        "tags": [
+          "Company"
+        ],
+        "summary": "Listar companhias cadastradas",
+        "description": "Rota espécifica que lista todas as companhias cadastradas",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Company"
+        ],
+        "summary": "Cadastrar companhia",
+        "description": "Rota específica para cadastro de novas companhias no sistema",
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/addCompany"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/copmanies/{id}": {
+      "get": {
+        "tags": [
+          "Company"
+        ],
+        "summary": "Listar companhia",
+        "description": "Rota específica para exibir uma companhia cadastrada, específicada pelo ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID da companhia"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/companies/{id}": {
+      "put": {
+        "tags": [
+          "Company"
+        ],
+        "summary": "Atualizar companhia",
+        "description": "Rota específica para atualizar uma companhia, específicada pelo parãmetro ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID da companhia"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateCompany"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Listar produtos cadastrados",
+        "description": "Rota específica para listar todos os produtos que estão cadastrados",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Cadastrar produto",
+        "description": "Cadastra um novo produto a ser vendido",
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/addProduct"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/search": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Pesquisar produto",
+        "description": "Rota que lista um determinado produto especificado pelo query parâmetro id",
+        "parameters": [
+          {
+            "name": "categoriaId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/products/{id}": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Listar produto",
+        "description": "Rota específica para listar determinado produto, de acordo com o parâmetro id repassado do mesmo.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID do produto"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Atualizar produto",
+        "description": "Atualiza um novo produto, especificado pelo parâmetro ID repassado",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID do produto"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateProduct"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Deletar Produto",
+        "description": "Deleta um produto do banco de dados de acordo com o parâmetro ID repassado",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID do produto"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/categories": {
+      "get": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Listas categorias cadastradas",
+        "description": "Rota Específica para listar todas as categorias cadastradas no sistema ",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Cadastrar categoria",
+        "description": "Rota Específica para cadastro de uma nova categoria no sistema",
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/addCategory"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories/{id}": {
+      "get": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Listar categoria pelo id",
+        "description": "Rota Específica para exibição de uma única categoria cadastrada, de acordo com o parâmetro ID repassado",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID da categoria"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Atualizar categoria",
+        "description": "Rota Específica para atualizar uma determinada categoria cadastrada no sistema, de acordo com o parâmetro ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID da categoria"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateCategory"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Excluir categoria",
+        "description": "Rota Específica para exclusão de uma categoria",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID da categoria"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/payment-methods": {
+      "get": {
+        "tags": [
+          "Payment-Methods"
+        ],
+        "summary": "Listar métodos de pagamentos cadastrados",
+        "description": "Rota específica para exibir todos os métodos de pagamentos cadastrados",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/addPayment"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Payment-Methods"
+        ],
+        "summary": "Cadastro de um novo método de pagamento",
+        "description": " Rota específica para cadastrar um novo método de pagamento que será aceito pela api",
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/payment-methods/{id}": {
+      "get": {
+        "tags": [
+          "Payment-Methods"
+        ],
+        "summary": "Listar método de pagamento",
+        "description": "Rota destinada para listar um determinado método de pagamento de acordo com o parâmetro ID repassado",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID do método de pagamento"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Payment-Methods"
+        ],
+        "summary": "Atualizar método de pagamento",
+        "description": "Rota específica para alteração de um método de pagamento específico, de acordo com o parâmetro id repassado",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID do método de pagamento"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updatePayment"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Payment-Methods"
+        ],
+        "summary": "Deletar método de pagamento",
+        "description": "Rota específica para deletar determinado método de pagamento",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID do método de pagamento"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/orders": {
+      "post": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Cadastro de pedido",
+        "description": "Rota Específica para cadastro de um pedido do usuário",
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/addOrder"
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Pesquisar pedido usando filtro",
+        "description": "Rota Específica para buscar um determinado pedido pelo query parâmetro repassado de: Empresa, data ou status",
+        "parameters": [
+          {
+            "$ref": "#components/parameters/orderEmpresaId"
+          },
+          {
+            "$ref": "#components/parameters/orderDataInicio"
+          },
+          {
+            "$ref": "#components/parameters/orderDataFim"
+          },
+          {
+            "$ref": "#components/parameters/orderStatus"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/orders/{id}/items": {
+      "get": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Exibir itens de compra",
+        "description": "Rota Específica para exibição dos itens comprados de um determinado pedido, busaco pelo parâmetro ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID da compra"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/orders/{id}": {
+      "get": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": " Exibir compra",
+        "description": "Rota Específica para exibir informações de uma compra realizada",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID da compra"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/orders/{id}/status": {
+      "post": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Alterar status de compra",
+        "description": "Rota Específica para alteração do status de uma determinada compra específicada pelo parâmetro ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID da compra"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {}
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "successResponse": {
+        "type": "string",
+        "example": "inserido com sucesso"
+      },
+      "loginUser": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "email@email.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "123456"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "recoveryUser": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "email@email.com"
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "Id de um usuário cadastrado"
+          },
+          "nome": {
+            "type": "string",
+            "example": "Nome da Silva"
+          },
+          "email": {
+            "type": "string",
+            "example": "email@email.com"
+          }
+        }
+      },
+      "addUser": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string",
+            "example": "Nome da Silva"
+          },
+          "email": {
+            "type": "string",
+            "example": "email@email.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "password12345"
+          }
+        },
+        "required": [
+          "nome",
+          "email",
+          "password"
+        ]
+      },
+      "updateUser": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string",
+            "example": "Nome da Silva"
+          },
+          "email": {
+            "type": "string",
+            "example": "email@email.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "password12345"
+          }
+        },
+        "required": [
+          "nome",
+          "email"
+        ]
+      },
+      "addProduct": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string",
+            "example": "sanduíche "
+          },
+          "descricao": {
+            "type": "string",
+            "example": "um pão recheado com carne de amburguer e salada "
+          },
+          "preco": {
+            "type": "number",
+            "example": 12.12
+          },
+          "imagem": {
+            "type": "string",
+            "example": "uma imagem base64 ou uri"
+          },
+          "categoria": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "um id de categoria válida"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          },
+          "ativa": {
+            "type": "string",
+            "example": "true"
+          }
+        },
+        "required": [
+          "nome",
+          "descricao",
+          "preco",
+          "imagem"
+        ]
+      },
+      "updateProduct": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string",
+            "example": "sanduíche "
+          },
+          "descricao": {
+            "type": "string",
+            "example": "um pão recheado com carne de amburguer e salada "
+          },
+          "preco": {
+            "type": "number",
+            "example": 12.12
+          },
+          "imagem": {
+            "type": "string",
+            "example": "uma imagem base64 ou uri"
+          },
+          "categoria": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "um id de categoria válida"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          },
+          "ativa": {
+            "type": "string",
+            "example": "true"
+          }
+        },
+        "required": [
+          "nome",
+          "descricao",
+          "preco",
+          "imagem",
+          "categoria",
+          "ativa"
+        ]
+      },
+      "addCategory": {
+        "type": "object",
+        "properties": {
+          "descricao": {
+            "type": "string",
+            "example": "Comida"
+          },
+          "ativa": {
+            "type": "string",
+            "example": "true"
+          }
+        },
+        "required": [
+          "descricao"
+        ]
+      },
+      "updateCategory": {
+        "type": "object",
+        "properties": {
+          "descricao": {
+            "type": "string",
+            "example": "Comida"
+          },
+          "ativa": {
+            "type": "string",
+            "example": "true"
+          }
+        },
+        "required": [
+          "descricao",
+          "ativa"
+        ]
+      },
+      "addPayment": {
+        "type": "object",
+        "properties": {
+          "descricao": {
+            "type": "string",
+            "example": "Dinheiro"
+          },
+          "ativa": {
+            "type": "string",
+            "example": "true"
+          }
+        },
+        "required": [
+          "descricao",
+          "ativa"
+        ]
+      },
+      "updatePayment": {
+        "type": "object",
+        "properties": {
+          "descricao": {
+            "type": "string",
+            "example": "Dinheiro"
+          },
+          "ativa": {
+            "type": "string",
+            "example": "true"
+          }
+        },
+        "required": [
+          "descricao",
+          "ativa"
+        ]
+      },
+      "addCompany": {
+        "type": "object",
+        "properties": {
+          "logomarca": {
+            "type": "string",
+            "example": "uma imagem base64"
+          },
+          "cpfCnpj": {
+            "type": "string",
+            "example": "415.346.546-20"
+          },
+          "razaoSocial": {
+            "type": "string",
+            "example": "Empresa LMTD"
+          },
+          "nomeFantasia": {
+            "type": "string",
+            "example": "Criando Delicias"
+          },
+          "telefone": {
+            "type": "string",
+            "example": "88999999999"
+          },
+          "horarioFuncionamento": {
+            "type": "string",
+            "example": "12 horas"
+          },
+          "endereco": {
+            "type": "string",
+            "example": "Rua jancley dantas, n 50 - Paralimpa"
+          },
+          "localizacao": {
+            "type": "string",
+            "example": "uri do mapa"
+          },
+          "taxaEntrega": {
+            "type": "number",
+            "example": 10
+          },
+          "ativa": {
+            "type": "string",
+            "example": "true"
+          }
+        },
+        "required": [
+          "logomarca",
+          "cpfCnpj",
+          "razaoSocial",
+          "nomeFantasia",
+          "telefone",
+          "horarioFuncionamento",
+          "endereco",
+          "localizacao",
+          "taxaEntrega"
+        ]
+      },
+      "updateCompany": {
+        "type": "object",
+        "properties": {
+          "logomarca": {
+            "type": "string",
+            "example": "uma imagem base64"
+          },
+          "cpfCnpj": {
+            "type": "string",
+            "example": "415.346.546-20"
+          },
+          "razaoSocial": {
+            "type": "string",
+            "example": "Empresa LMTD"
+          },
+          "nomeFantasia": {
+            "type": "string",
+            "example": "Criando Delicias"
+          },
+          "telefone": {
+            "type": "string",
+            "example": "88999999999"
+          },
+          "horarioFuncionamento": {
+            "type": "string",
+            "example": "12 horas"
+          },
+          "endereco": {
+            "type": "string",
+            "example": "Rua jancley dantas, n 50 - Paralimpa"
+          },
+          "localizacao": {
+            "type": "string",
+            "example": "uri do mapa"
+          },
+          "taxaEntrega": {
+            "type": "number",
+            "example": 10
+          },
+          "ativa": {
+            "type": "string",
+            "example": "true"
+          }
+        },
+        "required": [
+          "logomarca",
+          "cpfCnpj",
+          "razaoSocial",
+          "nomeFantasia",
+          "telefone",
+          "horarioFuncionamento",
+          "endereco",
+          "localizacao",
+          "taxaEntrega",
+          "ativa"
+        ]
+      },
+      "addOrder": {
+        "type": "object",
+        "properties": {
+          "empresa": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "um ID válido"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          },
+          "cliente": {
+            "type": "object",
+            "properties": {
+              "telefone": {
+                "type": "string",
+                "example": "88999999999"
+              },
+              "nome": {
+                "type": "string",
+                "example": "Nome da Silva"
+              }
+            },
+            "required": [
+              "telefone",
+              "nome"
+            ]
+          },
+          "endereco": {},
+          "cpfCnpjCupom": {},
+          "isEntrega": {},
+          "formaPagamento": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "ID de método de pagamento válido"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          },
+          "taxaEntrega": {
+            "type": "number",
+            "example": 10
+          },
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "um ID válido"
+              },
+              "quantidade": {
+                "type": "number",
+                "example": 12
+              },
+              "observacao": {
+                "type": "string",
+                "example": "bem embalado"
+              }
+            },
+            "required": [
+              "id",
+              "quantidade"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pendente",
+              null
+            ]
+          },
+          "obervacoes": {
+            "type": "string",
+            "example": "cuidado ao transportar"
+          }
+        },
+        "required": [
+          "empresa",
+          "isEntrega",
+          "formaPagamento",
+          "taxaEntrega",
+          "items"
+        ]
+      },
+      "updateStatus": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "aprovado",
+              "entrega",
+              "concluido",
+              "cancelado"
+            ]
+          }
+        },
+        "required": [
+          "status"
+        ]
+      }
+    },
+    "parameters": {
+      "orderEmpresaId": {
+        "name": "empresaId",
+        "in": "query",
+        "description": "Id da empresa",
+        "required": "false",
+        "schema": {
+          "type": "string"
+        },
+        "format": "string"
+      },
+      "orderDataInicio": {
+        "name": "dataInicio",
+        "in": "query",
+        "description": "data de inicio do filtro com formato YYYY-MM-DD",
+        "required": "false",
+        "schema": {
+          "type": "date"
+        }
+      },
+      "orderDataFim": {
+        "name": "dataFim",
+        "in": "query",
+        "description": "data de fim do filtro com formato YYYY-MM-DD",
+        "required": "false",
+        "schema": {
+          "type": "date"
+        }
+      },
+      "orderStatus": {
+        "name": "status",
+        "in": "query",
+        "description": "status do Pedido",
+        "required": "false",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "pendente",
+            "aprovado",
+            "entrega",
+            "concluido",
+            "cancelado"
+          ]
+        }
+      }
+    }
+  }
+}

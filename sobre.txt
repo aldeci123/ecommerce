@@ -1,1 +1,1 @@
-api de e-commerce utilizando nodeJs + TypeScript + Express + Firebase
+api de e-commerce utilizando nodeJs + TypeScript + Express + Firebase + swagger

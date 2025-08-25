@@ -1,0 +1,15 @@
+# all archives in  lib
+lib/**/*
+
+# TypeScript v1 declaration files
+typings/
+
+# Node.js dependency directory
+node_modules/
+*.local
+
+# Logs
+.log
+
+# env
+.env
